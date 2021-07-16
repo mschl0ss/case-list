@@ -12,12 +12,12 @@ export interface User {
 }
 
 export interface Case {
-    id?: number,
-    title: string,
-    dateCreated: Moment,
-    dateUpdated: Moment,
+    id: string,
+    title?: string,
+    dateCreated: Moment | string,
+    dateUpdated: Moment | string,
     caseStatus: CaseStatus,
-    notes: string,
+    notes?: string,
     userName: string,
 }
 

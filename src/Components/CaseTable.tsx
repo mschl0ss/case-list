@@ -1,5 +1,5 @@
-import React from 'react';
-import {Case, CaseStatus} from "../Utils/Types";
+import React, {useContext, useEffect} from 'react';
+import {Case} from "../Utils/Types";
 import {
     makeStyles,
     Paper,
@@ -10,8 +10,10 @@ import {
     TableHead,
     TableRow
 } from "@material-ui/core";
-import moment, {Moment} from "moment";
+import moment from "moment";
 import CaseTableRow from "./CaseTableRow";
+import CaseTableRowNew from "./CaseTableRowNew";
+import {CaseStoreContext} from "./State/CaseStore";
 
 const useStyles = makeStyles({
     root: {
@@ -24,36 +26,9 @@ const useStyles = makeStyles({
     },
 });
 
-const caseRows: Case[] = [
-    {
-        title: "Sample 1",
-        dateCreated: moment.utc().subtract(1, "day"),
-        dateUpdated: moment.utc(),
-        caseStatus: "Created",
-        notes: "Lorem ipsum dolor sit amet",
-        userName: "Otis",
-    },
-    {
-        title: "Sample 2",
-        dateCreated: moment.utc().subtract(1, "day"),
-        dateUpdated: moment.utc(),
-        caseStatus: "Created",
-        notes: "Lorem ipsum dolor sit amet",
-        userName: "Evey",
-    },
-    {
-        title: "Sample 3",
-        dateCreated: moment.utc().subtract(1, "day"),
-        dateUpdated: moment.utc(),
-        caseStatus: "Created",
-        notes: "Lorem ipsum dolor sit amet",
-        userName: "Willa",
-    }
-]
-
 export default function CaseTable(): JSX.Element {
-
     const classes = useStyles();
+    const { cases } = useContext(CaseStoreContext);
 
     return(
         <TableContainer component={Paper} className={classes.root}>
@@ -68,14 +43,10 @@ export default function CaseTable(): JSX.Element {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {caseRows.map((caseRow) => (
-                        <CaseTableRow key={caseRow.title} caseProp={caseRow}/>
+                    <CaseTableRowNew />
+                    {cases.map((caseArg) => (
+                        <CaseTableRow key={caseArg.id} caseProp={caseArg}/>
                     ))}
-                    <TableRow>
-                        <TableCell colSpan={6}>
-                            + New Case
-                        </TableCell>
-                    </TableRow>
                 </TableBody>
             </Table>
         </TableContainer>

@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
-import {Chip, makeStyles, Paper, TextField, Typography} from "@material-ui/core";
+import React, {useContext, useState} from 'react';
+import {Chip, makeStyles, Paper, TextField} from "@material-ui/core";
 import {Case, CaseStatus} from "../Utils/Types";
+import {CaseStoreContext} from "./State/CaseStore";
+import moment from "moment";
 
 const useStyles = makeStyles({
     root: {
@@ -35,26 +37,19 @@ const useStyles = makeStyles({
 
 interface CaseFormProps {
     caseProp: Case,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    isNew: boolean,
 }
 export default function CaseForm(props: CaseFormProps): JSX.Element {
     const classes = useStyles();
-    const { caseProp } = props;
-    // const {
-    //     id,
-    //     title,
-    //     caseStatus,
-    //     dateCreated,
-    //     dateUpdated,
-    //     notes,
-    //     userName
-    // } = props.caseProp;
+    const { caseProp, setOpen, isNew } = props;
+    const { saveCase } = useContext(CaseStoreContext);
 
-    const [title, setTitle] = useState<string>(caseProp.title);
+    const [title, setTitle] = useState<string | undefined>(caseProp.title);
     const [caseStatus, setCaseStatus] = useState<CaseStatus>(caseProp.caseStatus);
-    const [notes, setNotes] = useState<string>(caseProp.notes);
+    const [notes, setNotes] = useState<string | undefined>(caseProp.notes);
 
-    const getNextAction = (caseStatus: CaseStatus): string[] => {
+    const getNextActions = (caseStatus: CaseStatus): string[] => {
         switch(caseStatus) {
             case("Created"):
                 return ["Submit"]
@@ -68,11 +63,29 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
         }
     }
 
-    function onTitleChange(newValue: string) {
+    async function onTitleChange(newValue: string) {
         setTitle(newValue);
+        if(!isNew) {
+            await saveCase({
+                ...caseProp,
+                title: newValue,
+                dateUpdated: moment.utc().format(),
+            })
+        }
     }
 
-    function onCaseStatusChange(newValue: string) {
+    async function onNotesChange(newValue: string) {
+        setNotes(newValue);
+        if(!isNew) {
+            await saveCase({
+                ...caseProp,
+                notes: newValue,
+                dateUpdated: moment.utc().format()
+            })
+        }
+    }
+
+    async function onCaseStatusChange(newValue: string) {
         let newCaseStatus: CaseStatus;
         switch(newValue) {
             case("Submit"):
@@ -91,14 +104,28 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                 newCaseStatus = "Created"
         }
         setCaseStatus(newCaseStatus);
+
+        await saveCase({
+            ...caseProp,
+            dateUpdated: moment.utc().format(),
+            caseStatus: newCaseStatus,
+            title,
+            notes,
+        })
+
+        if(isNew) {
+            setOpen(false);
+        }
     }
 
     return(
         <div>
-            <Paper elevation={1} className={classes.root}>
+            <Paper elevation={2} className={classes.root}>
 
                 <div className={classes.headerRow}>
                     <TextField
+                        label="Case Title"
+                        variant="outlined"
                         value={title}
                         onChange={(e) => onTitleChange(e.target.value)}
                     />
@@ -106,7 +133,7 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                     <div className={classes.headerRowCaseStatus}>
                         <div>Status: {caseStatus}</div>
                         <div className={classes.nextStepButtonRow}>
-                            {getNextAction(caseStatus).map(action => (
+                            {getNextActions(caseStatus).map(action => (
                                 <Chip
                                     key={action + Math.random()}
                                     label={action}
@@ -120,6 +147,8 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                 <div className={classes.globalNotes}>
                     <TextField
                         className={classes.globalNotesTextField}
+                        value={notes}
+                        onChange={(e) => onNotesChange(e.target.value)}
                         variant="outlined"
                         label="General Notes"
                         multiline

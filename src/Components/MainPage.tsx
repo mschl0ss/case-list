@@ -2,6 +2,7 @@ import React from 'react';
 import {makeStyles} from "@material-ui/core";
 import CaseTable from "./CaseTable";
 import CaseListAppBar from "./CaseListAppBar";
+import {CaseStoreProvider} from "./State/CaseStore";
 
 const useStyles = makeStyles({
     root: {
@@ -19,9 +20,10 @@ export default function MainPage(): JSX.Element {
 
     return(
         <div className={classes.root}>
-
-            <CaseListAppBar />
-            <CaseTable/>
+            <CaseStoreProvider>
+                <CaseListAppBar />
+                <CaseTable/>
+            </CaseStoreProvider>
         </div>
     )
 

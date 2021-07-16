@@ -1,13 +1,20 @@
 import React from 'react';
 import {Case, CaseStatus} from "../Utils/Types";
-import {Moment} from "moment";
 import {Chip, Collapse, IconButton, makeStyles, TableCell, TableRow} from "@material-ui/core";
 import {blue, green} from "@material-ui/core/colors";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import CaseForm from "./CaseForm";
 
-
+/*
+.textContainer {
+  display: block;
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+ */
 const useStyles = makeStyles({
     root: {
         cursor: "pointer",
@@ -21,6 +28,13 @@ const useStyles = makeStyles({
     greenChip: {
         backgroundColor: green["300"],
         color: "white",
+    },
+    titleCell: {
+        minWidth: 100,
+        maxWidth: 100,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
     }
 });
 
@@ -63,7 +77,7 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" className={classes.titleCell}>
                     {title}
                 </TableCell>
                 <TableCell align="center">
@@ -73,12 +87,12 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
                     />
                 </TableCell>
                 <TableCell align="right">{userName}</TableCell>
-                <TableCell align="right">{dateUpdated.format()}</TableCell>
+                <TableCell align="right">{dateUpdated}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        <CaseForm caseProp={props.caseProp} setOpen={setOpen}/>
+                        <CaseForm caseProp={props.caseProp} setOpen={setOpen} isNew={false}/>
                     </Collapse>
                 </TableCell>
             </TableRow>
