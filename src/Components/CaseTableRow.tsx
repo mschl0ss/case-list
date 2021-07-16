@@ -5,6 +5,7 @@ import {blue, green} from "@material-ui/core/colors";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import CaseForm from "./CaseForm";
+import {StatusChip} from "./StatusChip";
 
 /*
 .textContainer {
@@ -81,10 +82,7 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
                     {title}
                 </TableCell>
                 <TableCell align="center">
-                    <Chip
-                        label={caseStatus}
-                        className={getStatusColor(caseStatus)}
-                    />
+                    <StatusChip caseStatusOrAction={caseStatus} />
                 </TableCell>
                 <TableCell align="right">{userName}</TableCell>
                 <TableCell align="right">{dateUpdated}</TableCell>

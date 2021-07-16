@@ -1,8 +1,9 @@
 import React, {useContext, useState} from 'react';
 import {Chip, makeStyles, Paper, TextField} from "@material-ui/core";
-import {Case, CaseStatus} from "../Utils/Types";
+import {Case, CaseStatus, CaseStatusAction} from "../Utils/Types";
 import {CaseStoreContext} from "./State/CaseStore";
 import moment from "moment";
+import {StatusChip} from "./StatusChip";
 
 const useStyles = makeStyles({
     root: {
@@ -49,7 +50,7 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
     const [caseStatus, setCaseStatus] = useState<CaseStatus>(caseProp.caseStatus);
     const [notes, setNotes] = useState<string | undefined>(caseProp.notes);
 
-    const getNextActions = (caseStatus: CaseStatus): string[] => {
+    const getNextActions = (caseStatus: CaseStatus): CaseStatusAction[] => {
         switch(caseStatus) {
             case("Created"):
                 return ["Submit"]
@@ -85,7 +86,7 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
         }
     }
 
-    async function onCaseStatusChange(newValue: string) {
+    async function onCaseStatusChange(newValue: CaseStatusAction) {
         let newCaseStatus: CaseStatus;
         switch(newValue) {
             case("Submit"):
@@ -113,9 +114,8 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
             notes,
         })
 
-        if(isNew) {
-            setOpen(false);
-        }
+        setOpen(false);
+
     }
 
     return(
@@ -134,12 +134,13 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                         <div>Status: {caseStatus}</div>
                         <div className={classes.nextStepButtonRow}>
                             {getNextActions(caseStatus).map(action => (
-                                <Chip
+                                <span
                                     key={action + Math.random()}
-                                    label={action}
                                     className={classes.nextStepButton}
-                                    onClick={() => onCaseStatusChange(action)}
-                                />
+                                    onClick={() => onCaseStatusChange(action as CaseStatusAction)}
+                                >
+                                    <StatusChip caseStatusOrAction={action} />
+                                </span>
                             ))}
                         </div>
                     </div>

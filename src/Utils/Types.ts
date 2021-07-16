@@ -1,6 +1,7 @@
 import {Moment} from "moment";
 
-export type CaseStatus = "Created" | "Submitted" | "Resubmitted" | "Approved" | "Rejected"
+export type CaseStatus = "Created" | "Submitted" | "Resubmitted" | "Approved" | "Rejected";
+export type CaseStatusAction = "Submit" | "Approve" | "Reject" | "Resubmit";
 
 export type UserRole = "User" | "Manager";
 
