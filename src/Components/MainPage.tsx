@@ -1,18 +1,13 @@
 import React from 'react';
-import {AppBar, IconButton, makeStyles, Theme, Toolbar, Typography} from "@material-ui/core";
-import {AccountCircle} from "@material-ui/icons";
+import {makeStyles} from "@material-ui/core";
+import CaseTable from "./CaseTable";
+import CaseListAppBar from "./CaseListAppBar";
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles({
     root: {
-        flexGrow: 1
-    },
-    title: {
         flexGrow: 1,
     },
-    grow: {
-        flexGrow: 1
-    }
-}))
+});
 
 export default function MainPage(): JSX.Element {
 
@@ -20,22 +15,9 @@ export default function MainPage(): JSX.Element {
 
     return(
         <div className={classes.root}>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h6" className={classes.title}>
-                        Case List
-                    </Typography>
-                    <div className={classes.grow} />
-                    <div aria-label="app-bar-buttons">
-                        <IconButton
-                            edge="end"
-                            color="inherit"
-                            >
-                            <AccountCircle />
-                        </IconButton>
-                    </div>
-                </Toolbar>
-            </AppBar>
+
+            <CaseListAppBar />
+            <CaseTable/>
         </div>
     )
 
