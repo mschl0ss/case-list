@@ -8,7 +8,9 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 
 const useStyles = makeStyles({
-
+    root: {
+        cursor: "pointer",
+    },
     chip: {
     },
     blueChip: {
@@ -44,7 +46,7 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
     }
 
     return (
-        <TableRow key={row.title}>
+        <TableRow key={row.title} className={classes.root} onClick={() => setOpen(!open)}>
             <TableCell align="left">
                 <IconButton
                     aria-label="expand row"

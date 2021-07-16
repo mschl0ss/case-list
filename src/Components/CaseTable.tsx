@@ -52,7 +52,7 @@ export default function CaseTable(): JSX.Element {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <CaseTableRow row={row} />
+                        <CaseTableRow row={row} key={row.name}/>
                     ))}
                 </TableBody>
             </Table>
