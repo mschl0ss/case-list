@@ -1,10 +1,11 @@
 import React from 'react';
 import {CaseStatus} from "../Utils/Types";
 import {Moment} from "moment";
-import {Chip, IconButton, makeStyles, TableCell, TableRow} from "@material-ui/core";
+import {Chip, Collapse, IconButton, makeStyles, TableCell, TableRow} from "@material-ui/core";
 import {blue, green} from "@material-ui/core/colors";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import CaseForm from "./CaseForm";
 
 
 const useStyles = makeStyles({
@@ -23,7 +24,7 @@ const useStyles = makeStyles({
     }
 });
 
-interface CaseTableRowProps {
+export interface CaseTableRowProps {
     row: {title: string, caseStatus: CaseStatus, date: Moment, name: string}
 }
 
@@ -46,27 +47,36 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
     }
 
     return (
-        <TableRow key={row.title} className={classes.root} onClick={() => setOpen(!open)}>
-            <TableCell align="left">
-                <IconButton
-                    aria-label="expand row"
-                    size="small"
-                    onClick={() => setOpen(!open)}
-                >
-                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton>
-            </TableCell>
-            <TableCell component="th" scope="row">
-                {row.title}
-            </TableCell>
-            <TableCell align="center">
-                <Chip
-                    label={row.caseStatus}
-                    className={getStatusColor(row.caseStatus)}
-                />
-            </TableCell>
-            <TableCell align="right">{row.name}</TableCell>
-            <TableCell align="right">{row.date.format()}</TableCell>
-        </TableRow>
+        <React.Fragment>
+            <TableRow key={row.title} className={classes.root} onClick={() => setOpen(!open)}>
+                <TableCell align="left">
+                    <IconButton
+                        aria-label="expand row"
+                        size="small"
+                        onClick={() => setOpen(!open)}
+                    >
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                </TableCell>
+                <TableCell component="th" scope="row">
+                    {row.title}
+                </TableCell>
+                <TableCell align="center">
+                    <Chip
+                        label={row.caseStatus}
+                        className={getStatusColor(row.caseStatus)}
+                    />
+                </TableCell>
+                <TableCell align="right">{row.name}</TableCell>
+                <TableCell align="right">{row.date.format()}</TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <CaseForm row={row}/>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
     )
 }
