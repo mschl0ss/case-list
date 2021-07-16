@@ -1,5 +1,5 @@
 import React from 'react';
-import {CaseStatus} from "../Utils/Types";
+import {Case, CaseStatus} from "../Utils/Types";
 import {Moment} from "moment";
 import {Chip, Collapse, IconButton, makeStyles, TableCell, TableRow} from "@material-ui/core";
 import {blue, green} from "@material-ui/core/colors";
@@ -25,13 +25,18 @@ const useStyles = makeStyles({
 });
 
 export interface CaseTableRowProps {
-    row: {title: string, caseStatus: CaseStatus, date: Moment, name: string}
+    caseProp: Case
 }
 
 export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-    const { row } = props;
+    const {
+        title,
+        caseStatus,
+        userName,
+        dateUpdated
+    } = props.caseProp;
 
     const getStatusColor = (caseStatus: CaseStatus): string => {
         switch(caseStatus) {
@@ -48,7 +53,7 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
 
     return (
         <React.Fragment>
-            <TableRow key={row.title} className={classes.root} onClick={() => setOpen(!open)}>
+            <TableRow key={title} className={classes.root} onClick={() => setOpen(!open)}>
                 <TableCell align="left">
                     <IconButton
                         aria-label="expand row"
@@ -59,21 +64,21 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {row.title}
+                    {title}
                 </TableCell>
                 <TableCell align="center">
                     <Chip
-                        label={row.caseStatus}
-                        className={getStatusColor(row.caseStatus)}
+                        label={caseStatus}
+                        className={getStatusColor(caseStatus)}
                     />
                 </TableCell>
-                <TableCell align="right">{row.name}</TableCell>
-                <TableCell align="right">{row.date.format()}</TableCell>
+                <TableCell align="right">{userName}</TableCell>
+                <TableCell align="right">{dateUpdated.format()}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        <CaseForm row={row}/>
+                        <CaseForm caseProp={props.caseProp} setOpen={setOpen}/>
                     </Collapse>
                 </TableCell>
             </TableRow>

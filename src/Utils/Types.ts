@@ -1,3 +1,5 @@
+import {Moment} from "moment";
+
 export type CaseStatus = "Created" | "Submitted" | "Resubmitted" | "Approved" | "Rejected"
 
 export type UserRole = "User" | "Manager";
@@ -11,10 +13,12 @@ export interface User {
 
 export interface Case {
     id?: number,
+    title: string,
+    dateCreated: Moment,
+    dateUpdated: Moment,
     caseStatus: CaseStatus,
     notes: string,
-    userId: number,
-    managerId: number
+    userName: string,
 }
 
 export interface CaseImage {

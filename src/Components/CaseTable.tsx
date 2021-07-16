@@ -1,5 +1,5 @@
 import React from 'react';
-import {CaseStatus} from "../Utils/Types";
+import {Case, CaseStatus} from "../Utils/Types";
 import {
     makeStyles,
     Paper,
@@ -24,15 +24,32 @@ const useStyles = makeStyles({
     },
 });
 
-function createData(title: string, caseStatus: CaseStatus, date: Moment, name: string) {
-    return {title, caseStatus, date, name};
-}
-
-const rows = [
-    createData('Sample 1', "Created", moment.utc(), "Otis"),
-    createData('Sample 2', "Submitted", moment.utc(), "Evey"),
-    createData('Sample 3', "Approved", moment.utc(), "Willa"),
-];
+const caseRows: Case[] = [
+    {
+        title: "Sample 1",
+        dateCreated: moment.utc().subtract(1, "day"),
+        dateUpdated: moment.utc(),
+        caseStatus: "Created",
+        notes: "Lorem ipsum dolor sit amet",
+        userName: "Otis",
+    },
+    {
+        title: "Sample 2",
+        dateCreated: moment.utc().subtract(1, "day"),
+        dateUpdated: moment.utc(),
+        caseStatus: "Created",
+        notes: "Lorem ipsum dolor sit amet",
+        userName: "Evey",
+    },
+    {
+        title: "Sample 3",
+        dateCreated: moment.utc().subtract(1, "day"),
+        dateUpdated: moment.utc(),
+        caseStatus: "Created",
+        notes: "Lorem ipsum dolor sit amet",
+        userName: "Willa",
+    }
+]
 
 export default function CaseTable(): JSX.Element {
 
@@ -47,13 +64,18 @@ export default function CaseTable(): JSX.Element {
                         <TableCell>Title</TableCell>
                         <TableCell align="center">Status</TableCell>
                         <TableCell align="right">User</TableCell>
-                        <TableCell align="right">Date</TableCell>
+                        <TableCell align="right">Date Updated</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
-                        <CaseTableRow row={row} key={row.name}/>
+                    {caseRows.map((caseRow) => (
+                        <CaseTableRow key={caseRow.title} caseProp={caseRow}/>
                     ))}
+                    <TableRow>
+                        <TableCell colSpan={6}>
+                            + New Case
+                        </TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
         </TableContainer>
