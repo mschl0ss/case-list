@@ -1,4 +1,5 @@
 import {Moment} from "moment";
+import {IAnnotation} from "react-picture-annotation/dist/types/src/Annotation";
 
 export const CaseStatuses: CaseStatus[] = ["Created", "Submitted", "Resubmitted", "Approved", "Rejected"]
 export type CaseStatus = "Created" | "Submitted" | "Resubmitted" | "Approved" | "Rejected";
@@ -29,5 +30,5 @@ export interface CaseImage {
     dateUploaded: string,
     url: string,
     thumbnailUrl: string,
-    notes?: string
+    annotationData: IAnnotation[]
 }

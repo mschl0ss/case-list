@@ -20,9 +20,8 @@ interface CaseFormPhotoUploadProps {
 }
 
 export default function CaseFormPhotoUpload(props: CaseFormPhotoUploadProps): JSX.Element {
-    const { caseProp, onCaseImageUpload } = props;
+    const { onCaseImageUpload } = props;
     const classes = useStyles();
-    const { saveCase } = useContext(CaseStoreContext);
 
     // @ts-ignore
     const widget = window.cloudinary.createUploadWidget({
@@ -38,6 +37,7 @@ export default function CaseFormPhotoUpload(props: CaseFormPhotoUploadProps): JS
                 dateUploaded: moment.utc().format(),
                 url: resultEvent.info.secure_url,
                 thumbnailUrl: resultEvent.info.thumbnail_url,
+                annotationData: [],
             });
             onCaseImageUpload(newImageId);
         }

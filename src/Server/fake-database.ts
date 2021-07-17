@@ -24,7 +24,6 @@ export const CaseImageRepository = {
         return await set(caseImage.id, caseImage, caseImageStore)
     },
     async findMany(imageIds: string[]): Promise<CaseImage[]> {
-        console.log('imageIds from repository', imageIds)
         return await getMany(imageIds, caseImageStore)
     }
 }

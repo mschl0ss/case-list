@@ -1,18 +1,18 @@
 import React, {useEffect} from 'react';
 import {CaseImage} from "../Utils/Types";
-import {makeStyles} from "@material-ui/core";
+import {makeStyles, TextField} from "@material-ui/core";
+import {ReactPictureAnnotation} from "react-picture-annotation";
+import {IAnnotation} from "react-picture-annotation/dist/types/src/Annotation";
+import {CaseImageRepository} from "../Server/fake-database";
 
 const useStyles = makeStyles({
     root: {
         margin: '15px 0',
-        paddingTop: 15,
+        padding: '15px 15px 0 15px',
         display: 'flex',
-        borderTop: 'solid 1px #DFE0E0'
-    },
-    media: {
-        maxWidth: '50%',
-        height: 'auto',
-        width: 'auto'
+        borderTop: 'solid 1px #DFE0E0',
+        maxWidth: '100%',
+        minHeight: 850
     },
 })
 interface CaseImageFormProps {
@@ -24,13 +24,25 @@ export default function CaseImageForm(props: CaseImageFormProps): JSX.Element {
 
     const { caseImage } = props;
 
-    useEffect(() => {
-        console.log('caseImageForm caseImage', caseImage)
-    }, [caseImage])
+    const onChange = async (data: IAnnotation[]) => {
+        CaseImageRepository.save({
+            ...caseImage,
+            annotationData: data
+        })
+    }
+    const onSelect = (selectedId: string | null) => null;
 
     return(
         <div className={classes.root}>
-            <img src={caseImage.url} className={classes.media}/>
+            <ReactPictureAnnotation
+                onChange={onChange}
+                width={800}
+                height={800}
+                image={caseImage.url}
+                onSelect={onSelect}
+                scrollSpeed={0}
+                annotationData={caseImage.annotationData}
+            />
         </div>
     )
 }

@@ -179,7 +179,6 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                         maxRows={10}
                     />
                 </div>
-
                 {caseImages.map(caseImage => (
                     <CaseImageForm caseImage={caseImage} />
                 ))}
