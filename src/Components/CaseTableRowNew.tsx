@@ -1,5 +1,5 @@
 import React from 'react';
-import {Collapse, makeStyles, TableCell, TableRow, Typography} from "@material-ui/core";
+import {Button, Collapse, makeStyles, TableCell, TableRow,} from "@material-ui/core";
 import {Case} from "../Utils/Types";
 import {v4 as uuidv4} from "uuid";
 import moment from "moment";
@@ -34,7 +34,9 @@ export default function CaseTableRowNew(): JSX.Element {
         <React.Fragment>
             <TableRow onClick={() => setOpen(!open)} >
                 <TableCell colSpan={6} className={classes.newCaseRow}>
-                    <Typography variant="h6">+ New Case</Typography>
+                    <Button
+                        variant="contained"
+                    >+ New Case</Button>
                 </TableCell>
             </TableRow>
             <TableRow>

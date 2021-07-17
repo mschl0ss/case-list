@@ -104,7 +104,6 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
             default:
                 newCaseStatus = "Created"
         }
-        setCaseStatus(newCaseStatus);
 
         await saveCase({
             ...caseProp,
