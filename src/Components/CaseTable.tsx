@@ -60,9 +60,9 @@ export default function CaseTable(): JSX.Element {
                 <TableHead>
                     <TableRow>
                         <TableCell />
-                        <TableCell>Title</TableCell>
+                        <TableCell align="left">Title</TableCell>
                         <TableCell align="center">Status</TableCell>
-                        <TableCell align="right">User</TableCell>
+                        <TableCell align="center">User</TableCell>
                         <TableCell align="right">Date Updated</TableCell>
                     </TableRow>
                 </TableHead>

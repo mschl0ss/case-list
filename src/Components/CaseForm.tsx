@@ -1,12 +1,12 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, makeStyles, Paper, TextField} from "@material-ui/core";
 import {Case, CaseImage, CaseStatus, CaseStatusAction} from "../Utils/Types";
-import {CaseStoreContext} from "./State/CaseStore";
 import moment from "moment";
 import {StatusActionButton} from "./StatusActionButton";
 import CaseFormPhotoUpload from "./CaseFormPhotoUpload";
 import {CaseImageRepository} from "../Server/fake-database";
 import CaseImageForm from "./CaseImageForm";
+import {v4 as uuidv4} from "uuid";
 
 const useStyles = makeStyles({
     root: {
@@ -44,13 +44,11 @@ const useStyles = makeStyles({
 
 interface CaseFormProps {
     caseProp: Case,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
     setRowCase: (caseArg: Case) => void
 }
 export default function CaseForm(props: CaseFormProps): JSX.Element {
     const classes = useStyles();
-    const { caseProp, setOpen, setRowCase } = props;
-    const { saveCase } = useContext(CaseStoreContext);
+    const { caseProp, setRowCase } = props;
 
     const [title, setTitle] = useState<string | undefined>(caseProp.title);
     const [notes, setNotes] = useState<string | undefined>(caseProp.notes);
@@ -77,6 +75,27 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                 return ["Resubmit"];
             default:
                 return [];
+        }
+    }
+    // @ts-ignore
+    const widget = window.cloudinary.createUploadWidget({
+            cloudName: "dkyipbwc4",
+            uploadPreset: "momcakbh" },
+        (error: any, result: any) => { checkUploadResult(result)})
+
+    const checkUploadResult = async (resultEvent: any) => {
+        if(resultEvent.event === 'success') {
+            const newImageId = uuidv4();
+            await CaseImageRepository.save({
+                id: newImageId,
+                dateUploaded: moment.utc().format(),
+                url: resultEvent.info.secure_url,
+                thumbnailUrl: resultEvent.info.thumbnail_url,
+                annotationData: [],
+                height: resultEvent.info.height,
+                width: resultEvent.info.width,
+            });
+            onCaseImageUpload(newImageId);
         }
     }
 
@@ -135,8 +154,6 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
             notes,
         })
 
-        setOpen(false);
-
     }
 
     return(
@@ -150,7 +167,7 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                         value={title || ''}
                         onChange={(e) => onTitleChange(e.target.value)}
                     />
-                    <CaseFormPhotoUpload caseProp={caseProp} onCaseImageUpload={onCaseImageUpload}/>
+                    <CaseFormPhotoUpload widget={widget} />
                     <div className={classes.headerRowCaseStatus}>
                         <div>
                             <span>Status:&nbsp;</span>
@@ -175,12 +192,11 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                         variant="outlined"
                         label="General Notes"
                         multiline
-                        rows={2}
                         maxRows={10}
                     />
                 </div>
                 {caseImages.map(caseImage => (
-                    <CaseImageForm caseImage={caseImage} />
+                    <CaseImageForm key={caseImage.id} caseImageProp={caseImage} />
                 ))}
 
             </Paper>

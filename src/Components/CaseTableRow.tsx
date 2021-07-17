@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Case} from "../Utils/Types";
 import {Collapse, IconButton, makeStyles, TableCell, TableRow} from "@material-ui/core";
-import {blue, green, orange} from "@material-ui/core/colors";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import CaseForm from "./CaseForm";
@@ -69,13 +68,13 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row" className={classes.titleCell}>
+                <TableCell component="th" scope="row" className={classes.titleCell} align="left">
                     {title}
                 </TableCell>
                 <TableCell align="center">
                     <StatusChip caseStatus={caseStatus} />
                 </TableCell>
-                <TableCell align="right">{userName}</TableCell>
+                <TableCell align="center">{userName}</TableCell>
                 <TableCell align="right">{moment(dateUpdated).format("ddd, h:mm:ss a")}</TableCell>
             </TableRow>
             <TableRow>
@@ -83,7 +82,6 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <CaseForm
                             caseProp={rowCase}
-                            setOpen={setOpen}
                             setRowCase={setRowCase}
                         />
                     </Collapse>

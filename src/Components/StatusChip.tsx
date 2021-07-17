@@ -23,8 +23,9 @@ const useStyles = makeStyles({
         backgroundColor: orange["300"],
         color: "white",
     },
-    cursorPointer: {
-        cursor: 'pointer'
+    chipStyles: {
+        cursor: 'pointer',
+        minWidth: 100,
     }
 });
 
@@ -35,16 +36,16 @@ export function StatusChip(props: {caseStatus: CaseStatus}): JSX.Element {
     const getStatusColor = (status: CaseStatus ): string => {
         switch(status) {
             case("Created"):
-                return clsx(classes.orangeChip, classes.cursorPointer);
+                return clsx(classes.orangeChip, classes.chipStyles);
             case("Submitted"):
             case("Resubmitted"):
-                return clsx(classes.blueChip, classes.cursorPointer);
+                return clsx(classes.blueChip, classes.chipStyles);
             case("Approved"):
-                return clsx(classes.greenChip, classes.cursorPointer);
+                return clsx(classes.greenChip, classes.chipStyles);
             case("Rejected"):
-                return clsx(classes.redChip, classes.cursorPointer);
+                return clsx(classes.redChip, classes.chipStyles);
             default:
-                return clsx(classes.chip, classes.cursorPointer);
+                return clsx(classes.chip, classes.chipStyles);
         }
     }
 

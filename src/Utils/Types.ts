@@ -30,5 +30,7 @@ export interface CaseImage {
     dateUploaded: string,
     url: string,
     thumbnailUrl: string,
-    annotationData: IAnnotation[]
+    annotationData: IAnnotation[],
+    height: number,
+    width: number,
 }
