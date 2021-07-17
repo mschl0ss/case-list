@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {makeStyles, Paper, TextField} from "@material-ui/core";
+import {Box, makeStyles, Paper, TextField} from "@material-ui/core";
 import {Case, CaseStatus, CaseStatusAction} from "../Utils/Types";
 import {CaseStoreContext} from "./State/CaseStore";
 import moment from "moment";
@@ -33,6 +33,9 @@ const useStyles = makeStyles({
     },
     globalNotesTextField: {
         width: '100%'
+    },
+    inline: {
+        display: 'inline'
     }
 
 })
@@ -131,7 +134,10 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                     />
                     <CaseFormPhotoUpload />
                     <div className={classes.headerRowCaseStatus}>
-                        <div>Status: {caseStatus}</div>
+                        <div>
+                            <span>Status:&nbsp;</span>
+                            <Box fontWeight={800} className={classes.inline}>{caseStatus}</Box>
+                        </div>
                         <div className={classes.nextStepButtonRow}>
                             {getNextActions(caseStatus).map(action => (
                                 <StatusActionButton
@@ -152,7 +158,7 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                         label="General Notes"
                         multiline
                         rows={2}
-                        maxRows={20}
+                        maxRows={10}
                     />
                 </div>
 

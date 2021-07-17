@@ -27,6 +27,11 @@ const useStyles = makeStyles({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis'
+    },
+    collapseCell: {
+        paddingBottom: 0,
+        paddingTop: 0,
+        backgroundColor: "#fafafa"
     }
 });
 
@@ -66,7 +71,7 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
                 <TableCell align="right">{dateUpdated}</TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell className={classes.collapseCell} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <CaseForm caseProp={props.caseProp} setOpen={setOpen} isNew={false}/>
                     </Collapse>
