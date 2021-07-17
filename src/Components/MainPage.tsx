@@ -3,6 +3,7 @@ import {makeStyles} from "@material-ui/core";
 import CaseTable from "./CaseTable";
 import CaseListAppBar from "./CaseListAppBar";
 import {CaseStoreProvider} from "./State/CaseStore";
+import CaseListAppBarFilters from "./CaseListAppBarFilters";
 
 const useStyles = makeStyles({
     root: {
@@ -12,6 +13,7 @@ const useStyles = makeStyles({
         minHeight: '100vh',
         backgroundColor: '#fafafa'
     },
+
 });
 
 export default function MainPage(): JSX.Element {
@@ -22,6 +24,7 @@ export default function MainPage(): JSX.Element {
         <div className={classes.root}>
             <CaseStoreProvider>
                 <CaseListAppBar />
+                <CaseListAppBarFilters />
                 <CaseTable/>
             </CaseStoreProvider>
         </div>

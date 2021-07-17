@@ -1,5 +1,6 @@
 import {Moment} from "moment";
 
+export const CaseStatuses: CaseStatus[] = ["Created", "Submitted", "Resubmitted", "Approved", "Rejected"]
 export type CaseStatus = "Created" | "Submitted" | "Resubmitted" | "Approved" | "Rejected";
 export type CaseStatusAction = "Submit" | "Approve" | "Reject" | "Resubmit";
 

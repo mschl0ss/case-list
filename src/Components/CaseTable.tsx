@@ -28,7 +28,12 @@ const useStyles = makeStyles({
 
 export default function CaseTable(): JSX.Element {
     const classes = useStyles();
-    const { cases } = useContext(CaseStoreContext);
+    const { cases, filters } = useContext(CaseStoreContext);
+
+    const casesToShow = (): Case[] => {
+        if(filters.length === 0) { return cases; }
+        return cases.filter(caseArg => filters.includes(caseArg.caseStatus))
+    }
 
     return(
         <TableContainer component={Paper} className={classes.root}>
@@ -44,7 +49,7 @@ export default function CaseTable(): JSX.Element {
                 </TableHead>
                 <TableBody>
                     <CaseTableRowNew />
-                    {cases.map((caseArg) => (
+                    {casesToShow().map((caseArg) => (
                         <CaseTableRow key={caseArg.id} caseProp={caseArg}/>
                     ))}
                 </TableBody>

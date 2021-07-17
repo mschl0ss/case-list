@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     alpha,
-    AppBar,
+    AppBar, Chip,
     IconButton,
     InputBase,
     makeStyles,
@@ -11,6 +11,8 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import {AccountCircle} from "@material-ui/icons";
+import FilterListIcon from '@material-ui/icons/FilterList';
+import CaseListAppBarFilters from "./CaseListAppBarFilters";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -59,6 +61,9 @@ const useStyles = makeStyles((theme: Theme) => ({
             width: '20ch',
         },
     },
+    chip: {
+        background: 'white'
+    }
 }));
 
 export default function CaseListAppBar(): JSX.Element {
@@ -85,14 +90,7 @@ export default function CaseListAppBar(): JSX.Element {
                     />
                 </div>
                 <div className={classes.grow} />
-                <div aria-label="app-bar-buttons">
-                    <IconButton
-                        edge="end"
-                        color="inherit"
-                    >
-                        <AccountCircle />
-                    </IconButton>
-                </div>
+
             </Toolbar>
         </AppBar>
     )
