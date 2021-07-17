@@ -8,13 +8,17 @@ import CaseForm from "./CaseForm";
 const useStyles = makeStyles({
     newCaseRow: {
         textAlign: "center",
-        // padding: 20,
         cursor: "pointer",
     }
 })
 export default function CaseTableRowNew(): JSX.Element {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+
+    const generateUser = () => {
+        const names = ["Otis", "Evey", "Willa"];
+        return names[Math.floor(Math.random() * names.length)];
+    }
 
     const generateNewCase = (): Case => ({
         id: uuidv4(),
@@ -23,7 +27,7 @@ export default function CaseTableRowNew(): JSX.Element {
         dateUpdated: moment().utc().format(),
         caseStatus: "Created",
         notes: undefined,
-        userName: "Otis"
+        userName: generateUser()
     })
 
     return (

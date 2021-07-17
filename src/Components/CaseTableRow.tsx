@@ -1,21 +1,12 @@
 import React from 'react';
-import {Case, CaseStatus} from "../Utils/Types";
-import {Chip, Collapse, IconButton, makeStyles, TableCell, TableRow} from "@material-ui/core";
+import {Case} from "../Utils/Types";
+import {Collapse, IconButton, makeStyles, TableCell, TableRow} from "@material-ui/core";
 import {blue, green} from "@material-ui/core/colors";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import CaseForm from "./CaseForm";
 import {StatusChip} from "./StatusChip";
 
-/*
-.textContainer {
-  display: block;
-  width: 200px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
- */
 const useStyles = makeStyles({
     root: {
         cursor: "pointer",
@@ -53,19 +44,6 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
         dateUpdated
     } = props.caseProp;
 
-    const getStatusColor = (caseStatus: CaseStatus): string => {
-        switch(caseStatus) {
-            case("Created"):
-                return classes.chip;
-            case("Submitted"):
-                return classes.blueChip;
-            case("Approved"):
-                return classes.greenChip;
-            default:
-                return classes.chip;
-        }
-    }
-
     return (
         <React.Fragment>
             <TableRow key={title} className={classes.root} onClick={() => setOpen(!open)}>
@@ -82,7 +60,7 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
                     {title}
                 </TableCell>
                 <TableCell align="center">
-                    <StatusChip caseStatusOrAction={caseStatus} />
+                    <StatusChip caseStatus={caseStatus} />
                 </TableCell>
                 <TableCell align="right">{userName}</TableCell>
                 <TableCell align="right">{dateUpdated}</TableCell>

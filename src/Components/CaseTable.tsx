@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {Case} from "../Utils/Types";
 import {
     makeStyles,
@@ -10,7 +10,6 @@ import {
     TableHead,
     TableRow
 } from "@material-ui/core";
-import moment from "moment";
 import CaseTableRow from "./CaseTableRow";
 import CaseTableRowNew from "./CaseTableRowNew";
 import {CaseStoreContext} from "./State/CaseStore";

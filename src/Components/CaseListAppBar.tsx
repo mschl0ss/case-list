@@ -82,7 +82,7 @@ export default function CaseListAppBar(): JSX.Element {
                             input: classes.inputInput,
                         }}
                         inputProps={{ 'aria-label': 'search' }}
-                        value={searchQuery}
+                        value={searchQuery || ''}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>

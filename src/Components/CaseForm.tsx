@@ -1,9 +1,9 @@
 import React, {useContext, useState} from 'react';
-import {Chip, makeStyles, Paper, TextField} from "@material-ui/core";
+import {makeStyles, Paper, TextField} from "@material-ui/core";
 import {Case, CaseStatus, CaseStatusAction} from "../Utils/Types";
 import {CaseStoreContext} from "./State/CaseStore";
 import moment from "moment";
-import {StatusChip} from "./StatusChip";
+import {StatusActionButton} from "./StatusActionButton";
 
 const useStyles = makeStyles({
     root: {
@@ -126,7 +126,7 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                     <TextField
                         label="Case Title"
                         variant="outlined"
-                        value={title}
+                        value={title || ''}
                         onChange={(e) => onTitleChange(e.target.value)}
                     />
                     <div className={classes.grow} />
@@ -134,13 +134,11 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                         <div>Status: {caseStatus}</div>
                         <div className={classes.nextStepButtonRow}>
                             {getNextActions(caseStatus).map(action => (
-                                <span
+                                <StatusActionButton
                                     key={action + Math.random()}
-                                    className={classes.nextStepButton}
-                                    onClick={() => onCaseStatusChange(action as CaseStatusAction)}
-                                >
-                                    <StatusChip caseStatusOrAction={action} />
-                                </span>
+                                    caseStatusAction={action}
+                                    onClick={onCaseStatusChange}
+                                />
                             ))}
                         </div>
                     </div>

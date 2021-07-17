@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import FilterListIcon from "@material-ui/icons/FilterList";
-import {Button, Chip, makeStyles, Typography} from "@material-ui/core";
+import {Button, makeStyles, Typography} from "@material-ui/core";
 import {CaseStatus, CaseStatusAction, CaseStatuses} from "../Utils/Types";
 import {CaseStoreContext} from "./State/CaseStore";
 import {blue, green, grey, orange, red} from "@material-ui/core/colors";
@@ -27,18 +27,18 @@ const useStyles = makeStyles({
         backgroundColor: 'white',
     },
     orangeChip: {
-        backgroundColor: orange["300"],
+        backgroundColor: orange["500"],
     },
     blueChip: {
-        backgroundColor: blue["300"],
+        backgroundColor: blue["500"],
         color: "white",
     },
     greenChip: {
-        backgroundColor: green["300"],
+        backgroundColor: green["500"],
         color: "white",
     },
     redChip: {
-        backgroundColor: red["300"],
+        backgroundColor: red["500"],
         color: "white",
     }
 })
@@ -86,8 +86,9 @@ export default function CaseListAppBarFilters(): JSX.Element {
             >
                 Clear Filters
             </Button>
-            {filterButtonDetails.map(details => (
+            {filterButtonDetails.map((details, index) => (
                 <Button
+                    key={index + details.css}
                     size="small"
                     variant="contained"
                     startIcon={<FilterListIcon />}

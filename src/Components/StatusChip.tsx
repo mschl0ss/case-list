@@ -1,7 +1,7 @@
 import React from 'react';
 import {Chip, makeStyles} from "@material-ui/core";
 import {blue, green, red} from "@material-ui/core/colors";
-import {CaseStatus, CaseStatusAction} from "../Utils/Types";
+import {CaseStatus} from "../Utils/Types";
 
 const useStyles = makeStyles({
     chip: {
@@ -20,23 +20,19 @@ const useStyles = makeStyles({
     }
 });
 
-export function StatusChip(props: {caseStatusOrAction: CaseStatus | CaseStatusAction}): JSX.Element {
+export function StatusChip(props: {caseStatus: CaseStatus}): JSX.Element {
     const classes = useStyles();
-    const { caseStatusOrAction } = props;
+    const { caseStatus } = props;
 
-    const getStatusColor = (chipText: CaseStatus | CaseStatusAction): string => {
-        switch(chipText) {
+    const getStatusColor = (status: CaseStatus ): string => {
+        switch(status) {
             case("Created"):
                 return classes.chip;
-            case("Submit"):
             case("Submitted"):
-            case("Resubmit"):
             case("Resubmitted"):
                 return classes.blueChip;
-            case("Approve"):
             case("Approved"):
                 return classes.greenChip;
-            case("Reject"):
             case("Rejected"):
                 return classes.redChip;
             default:
@@ -46,8 +42,8 @@ export function StatusChip(props: {caseStatusOrAction: CaseStatus | CaseStatusAc
 
     return(
         <Chip
-            label={caseStatusOrAction}
-            className={getStatusColor(caseStatusOrAction)}
+            label={caseStatus}
+            className={getStatusColor(caseStatus)}
         />
     )
 
