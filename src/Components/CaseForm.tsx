@@ -4,6 +4,7 @@ import {Case, CaseStatus, CaseStatusAction} from "../Utils/Types";
 import {CaseStoreContext} from "./State/CaseStore";
 import moment from "moment";
 import {StatusActionButton} from "./StatusActionButton";
+import CaseFormPhotoUpload from "./CaseFormPhotoUpload";
 
 const useStyles = makeStyles({
     root: {
@@ -128,7 +129,7 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                         value={title || ''}
                         onChange={(e) => onTitleChange(e.target.value)}
                     />
-                    <div className={classes.grow} />
+                    <CaseFormPhotoUpload />
                     <div className={classes.headerRowCaseStatus}>
                         <div>Status: {caseStatus}</div>
                         <div className={classes.nextStepButtonRow}>
@@ -154,6 +155,7 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                         maxRows={20}
                     />
                 </div>
+
             </Paper>
 
         </div>
