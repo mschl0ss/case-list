@@ -1,6 +1,6 @@
 import React from 'react';
 import {Chip, makeStyles} from "@material-ui/core";
-import {blue, green, red} from "@material-ui/core/colors";
+import {blue, green, orange, red} from "@material-ui/core/colors";
 import {CaseStatus} from "../Utils/Types";
 import clsx from "clsx";
 
@@ -19,6 +19,10 @@ const useStyles = makeStyles({
         backgroundColor: red["300"],
         color: "white",
     },
+    orangeChip: {
+        backgroundColor: orange["300"],
+        color: "white",
+    },
     cursorPointer: {
         cursor: 'pointer'
     }
@@ -31,7 +35,7 @@ export function StatusChip(props: {caseStatus: CaseStatus}): JSX.Element {
     const getStatusColor = (status: CaseStatus ): string => {
         switch(status) {
             case("Created"):
-                return clsx(classes.chip, classes.cursorPointer);
+                return clsx(classes.orangeChip, classes.cursorPointer);
             case("Submitted"):
             case("Resubmitted"):
                 return clsx(classes.blueChip, classes.cursorPointer);

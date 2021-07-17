@@ -1,10 +1,12 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Box, makeStyles, Paper, TextField} from "@material-ui/core";
-import {Case, CaseStatus, CaseStatusAction} from "../Utils/Types";
+import {Case, CaseImage, CaseStatus, CaseStatusAction} from "../Utils/Types";
 import {CaseStoreContext} from "./State/CaseStore";
 import moment from "moment";
 import {StatusActionButton} from "./StatusActionButton";
 import CaseFormPhotoUpload from "./CaseFormPhotoUpload";
+import {CaseImageRepository} from "../Server/fake-database";
+import CaseImageForm from "./CaseImageForm";
 
 const useStyles = makeStyles({
     root: {
@@ -43,16 +45,26 @@ const useStyles = makeStyles({
 interface CaseFormProps {
     caseProp: Case,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    isNew: boolean,
+    setRowCase: (caseArg: Case) => void
 }
 export default function CaseForm(props: CaseFormProps): JSX.Element {
     const classes = useStyles();
-    const { caseProp, setOpen, isNew } = props;
+    const { caseProp, setOpen, setRowCase } = props;
     const { saveCase } = useContext(CaseStoreContext);
 
     const [title, setTitle] = useState<string | undefined>(caseProp.title);
-    const [caseStatus, setCaseStatus] = useState<CaseStatus>(caseProp.caseStatus);
     const [notes, setNotes] = useState<string | undefined>(caseProp.notes);
+    const [caseImageIds, setCaseImageIds] = useState<string[]>(caseProp.imageIds);
+    const [caseImages, setCaseImages] = useState<CaseImage[]>([]);
+
+    useEffect(() => {
+        async function getCaseImages() {
+            const fetchedImages = await CaseImageRepository.findMany(caseImageIds)
+            setCaseImages(fetchedImages)
+        }
+
+        getCaseImages();
+    }, [caseImageIds])
 
     const getNextActions = (caseStatus: CaseStatus): CaseStatusAction[] => {
         switch(caseStatus) {
@@ -68,26 +80,32 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
         }
     }
 
+    async function onCaseImageUpload(caseImageId: string) {
+        const newImageIds = caseImageIds.concat(caseImageId);
+        setCaseImageIds(newImageIds);
+        await setRowCase({
+            ...caseProp,
+            imageIds: newImageIds
+        })
+    }
+
     async function onTitleChange(newValue: string) {
         setTitle(newValue);
-        if(!isNew) {
-            await saveCase({
-                ...caseProp,
-                title: newValue,
-                dateUpdated: moment.utc().format(),
-            })
-        }
+        await setRowCase({
+            ...caseProp,
+            title: newValue,
+            dateUpdated: moment.utc().format(),
+        })
     }
 
     async function onNotesChange(newValue: string) {
         setNotes(newValue);
-        if(!isNew) {
-            await saveCase({
-                ...caseProp,
-                notes: newValue,
-                dateUpdated: moment.utc().format()
-            })
-        }
+        await setRowCase({
+            ...caseProp,
+            notes: newValue,
+            dateUpdated: moment.utc().format()
+        })
+
     }
 
     async function onCaseStatusChange(newValue: CaseStatusAction) {
@@ -109,7 +127,7 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                 newCaseStatus = "Created"
         }
 
-        await saveCase({
+        await setRowCase({
             ...caseProp,
             dateUpdated: moment.utc().format(),
             caseStatus: newCaseStatus,
@@ -132,14 +150,14 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                         value={title || ''}
                         onChange={(e) => onTitleChange(e.target.value)}
                     />
-                    <CaseFormPhotoUpload />
+                    <CaseFormPhotoUpload caseProp={caseProp} onCaseImageUpload={onCaseImageUpload}/>
                     <div className={classes.headerRowCaseStatus}>
                         <div>
                             <span>Status:&nbsp;</span>
-                            <Box fontWeight={800} className={classes.inline}>{caseStatus}</Box>
+                            <Box fontWeight={800} className={classes.inline}>{caseProp.caseStatus}</Box>
                         </div>
                         <div className={classes.nextStepButtonRow}>
-                            {getNextActions(caseStatus).map(action => (
+                            {getNextActions(caseProp.caseStatus).map(action => (
                                 <StatusActionButton
                                     key={action + Math.random()}
                                     caseStatusAction={action}
@@ -161,6 +179,10 @@ export default function CaseForm(props: CaseFormProps): JSX.Element {
                         maxRows={10}
                     />
                 </div>
+
+                {caseImages.map(caseImage => (
+                    <CaseImageForm caseImage={caseImage} />
+                ))}
 
             </Paper>
 

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Case} from "../Utils/Types";
 import {
     makeStyles,
@@ -13,6 +13,7 @@ import {
 import CaseTableRow from "./CaseTableRow";
 import CaseTableRowNew from "./CaseTableRowNew";
 import {CaseStoreContext} from "./State/CaseStore";
+import moment from "moment";
 
 const useStyles = makeStyles({
     root: {
@@ -28,23 +29,30 @@ const useStyles = makeStyles({
 export default function CaseTable(): JSX.Element {
     const classes = useStyles();
     const { cases, filters, searchQuery } = useContext(CaseStoreContext);
+    const [casesToShow, setCasesToShow] = useState<Case[]>([]);
 
-    const casesToShow = (): Case[] => {
+    useEffect(() => {
+        let newCaseList;
         const noFilters = filters.length === 0;
         const noSearchQuery = searchQuery === undefined || searchQuery.length === 0;
         if(noFilters && noSearchQuery) {
-            return cases;
+            newCaseList = cases;
+        } else {
+            newCaseList = cases
+                .filter(caseArg => {
+                    if(filters.length === 0) {return true}
+                    return filters.includes(caseArg.caseStatus)
+                })
+                .filter(caseArg => {
+                    if(!searchQuery) return true;
+                    return caseArg.title?.includes(searchQuery)
+                })
         }
-        return cases
-            .filter(caseArg => {
-                if(filters.length === 0) {return true}
-                return filters.includes(caseArg.caseStatus)
-            })
-            .filter(caseArg => {
-                if(!searchQuery) return true;
-                return caseArg.title?.includes(searchQuery)
-            })
-    }
+
+        const sortedCases = newCaseList.sort((a,b) => moment(a.dateUpdated).isBefore(moment(b.dateUpdated)) ? 1 : -1)
+        setCasesToShow(sortedCases)
+
+    }, [cases, filters, searchQuery])
 
     return(
         <TableContainer component={Paper} className={classes.root}>
@@ -60,7 +68,7 @@ export default function CaseTable(): JSX.Element {
                 </TableHead>
                 <TableBody>
                     <CaseTableRowNew />
-                    {casesToShow().map((caseArg) => (
+                    {casesToShow.map((caseArg) => (
                         <CaseTableRow key={caseArg.id} caseProp={caseArg}/>
                     ))}
                 </TableBody>

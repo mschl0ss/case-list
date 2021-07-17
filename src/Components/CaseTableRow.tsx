@@ -1,25 +1,17 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Case} from "../Utils/Types";
 import {Collapse, IconButton, makeStyles, TableCell, TableRow} from "@material-ui/core";
-import {blue, green} from "@material-ui/core/colors";
+import {blue, green, orange} from "@material-ui/core/colors";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import CaseForm from "./CaseForm";
 import {StatusChip} from "./StatusChip";
+import {CaseStoreContext} from "./State/CaseStore";
+import moment from "moment";
 
 const useStyles = makeStyles({
     root: {
         cursor: "pointer",
-    },
-    chip: {
-    },
-    blueChip: {
-        backgroundColor: blue["300"],
-        color: "white",
-    },
-    greenChip: {
-        backgroundColor: green["300"],
-        color: "white",
     },
     titleCell: {
         minWidth: 100,
@@ -41,13 +33,29 @@ export interface CaseTableRowProps {
 
 export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const { saveCase } = useContext(CaseStoreContext);
+    const [rowCase, _setRowCase] = useState<Case>(props.caseProp);
+    const [open, setOpen] = useState(false);
     const {
         title,
         caseStatus,
         userName,
         dateUpdated
-    } = props.caseProp;
+    } = rowCase;
+
+    useEffect(() => {
+        if(
+            !moment(rowCase.dateCreated).isBefore(moment.utc().subtract(1, 'seconds'))
+            && !open
+        ) {
+            setOpen(true);
+        }
+    }, [open, rowCase.dateCreated])
+
+    async function setRowCase(caseArg: Case) {
+        await saveCase(caseArg);
+        _setRowCase(caseArg);
+    }
 
     return (
         <React.Fragment>
@@ -68,12 +76,16 @@ export default function CaseTableRow(props: CaseTableRowProps): JSX.Element {
                     <StatusChip caseStatus={caseStatus} />
                 </TableCell>
                 <TableCell align="right">{userName}</TableCell>
-                <TableCell align="right">{dateUpdated}</TableCell>
+                <TableCell align="right">{moment(dateUpdated).format("ddd, h:mm:ss a")}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell className={classes.collapseCell} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        <CaseForm caseProp={props.caseProp} setOpen={setOpen} isNew={false}/>
+                        <CaseForm
+                            caseProp={rowCase}
+                            setOpen={setOpen}
+                            setRowCase={setRowCase}
+                        />
                     </Collapse>
                 </TableCell>
             </TableRow>

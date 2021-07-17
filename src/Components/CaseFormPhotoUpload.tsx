@@ -1,5 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, makeStyles} from "@material-ui/core";
+import {v4 as uuidv4} from "uuid";
+import {Case} from "../Utils/Types";
+import {CaseImageRepository} from "../Server/fake-database";
+import moment from "moment";
+import {CaseStoreContext} from "./State/CaseStore";
 
 const useStyles = makeStyles({
     root: {
@@ -9,8 +14,15 @@ const useStyles = makeStyles({
     }
 });
 
-export default function CaseFormPhotoUpload(): JSX.Element {
+interface CaseFormPhotoUploadProps {
+    caseProp: Case,
+    onCaseImageUpload: (caseImageId: string) => void;
+}
+
+export default function CaseFormPhotoUpload(props: CaseFormPhotoUploadProps): JSX.Element {
+    const { caseProp, onCaseImageUpload } = props;
     const classes = useStyles();
+    const { saveCase } = useContext(CaseStoreContext);
 
     // @ts-ignore
     const widget = window.cloudinary.createUploadWidget({
@@ -18,10 +30,16 @@ export default function CaseFormPhotoUpload(): JSX.Element {
         uploadPreset: "momcakbh" },
         (error: any, result: any) => { checkUploadResult(result)})
 
-    const checkUploadResult = (resultEvent: any) => {
+    const checkUploadResult = async (resultEvent: any) => {
         if(resultEvent.event === 'success') {
-            console.log('resultEvent: ', resultEvent)
-            console.log('url to photo: ', resultEvent.info.secure_url)
+            const newImageId = uuidv4();
+            await CaseImageRepository.save({
+                id: newImageId,
+                dateUploaded: moment.utc().format(),
+                url: resultEvent.info.secure_url,
+                thumbnailUrl: resultEvent.info.thumbnail_url,
+            });
+            onCaseImageUpload(newImageId);
         }
     }
 
@@ -37,32 +55,3 @@ export default function CaseFormPhotoUpload(): JSX.Element {
         </div>
     )
 }
-
-/*
-result event:
-event: "success"
-info:
-    asset_id: "5186293c67e4806229d43ba16824a41d"
-    batchId: "uw-batch2"
-    bytes: 51525
-    created_at: "2021-07-17T13:13:19Z"
-    etag: "65ff00d1c2447f23d0302c0d2b8b585a"
-    existing: false
-    format: "png"
-    height: 392
-    id: "uw-file3"
-    original_filename: "Screen Shot 2021-07-17 at 8.47.55 AM"
-    path: "v1626527599/Screen_Shot_2021-07-17_at_8.47.55_AM_ymdagg.png"
-    placeholder: false
-    public_id: "Screen_Shot_2021-07-17_at_8.47.55_AM_ymdagg"
-    resource_type: "image"
-    secure_url: "https://res.cloudinary.com/dkyipbwc4/image/upload/v1626527599/Screen_Shot_2021-07-17_at_8.47.55_AM_ymdagg.png"
-    signature: "12d08353799a620cc7248569a04cef61b255c84d"
-    tags: []
-    thumbnail_url: "https://res.cloudinary.com/dkyipbwc4/image/upload/c_limit,h_60,w_90/v1626527599/Screen_Shot_2021-07-17_at_8.47.55_AM_ymdagg.png"
-    type: "upload"
-    url: "http://res.cloudinary.com/dkyipbwc4/image/upload/v1626527599/Screen_Shot_2021-07-17_at_8.47.55_AM_ymdagg.png"
-    version: 1626527599
-    version_id: "192f52e3e8c0eec959b76719e48ee15c"
-    width: 417
- */

@@ -21,11 +21,13 @@ export interface Case {
     caseStatus: CaseStatus,
     notes?: string,
     userName: string,
+    imageIds: string[]
 }
 
 export interface CaseImage {
-    id?: number,
-    location: string,
-    caseId: number,
-    notes: string
+    id: string,
+    dateUploaded: string,
+    url: string,
+    thumbnailUrl: string,
+    notes?: string
 }

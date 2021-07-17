@@ -1,7 +1,8 @@
-import { get, set, keys, createStore} from 'idb-keyval';
-import {Case} from "../Utils/Types";
+import {get, set, keys, createStore, getMany} from 'idb-keyval';
+import {Case, CaseImage} from "../Utils/Types";
 
 const caseStore = createStore("caseStore", "caseStore");
+const caseImageStore = createStore("caseImageStore", "caseImageStore");
 
 export const CaseRepository = {
     async save(caseToSave: Case): Promise<void> {
@@ -17,3 +18,13 @@ export const CaseRepository = {
         return Promise.all(cases as Promise<Case>[])
     }
 };
+
+export const CaseImageRepository = {
+    async save(caseImage: CaseImage): Promise<void> {
+        return await set(caseImage.id, caseImage, caseImageStore)
+    },
+    async findMany(imageIds: string[]): Promise<CaseImage[]> {
+        console.log('imageIds from repository', imageIds)
+        return await getMany(imageIds, caseImageStore)
+    }
+}
