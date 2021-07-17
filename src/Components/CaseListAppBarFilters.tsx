@@ -14,6 +14,9 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'space-between'
     },
+    title: {
+        marginRight: 10,
+    },
     chip: {
       // margin: '0 20px 0 0',
     },
@@ -73,7 +76,7 @@ export default function CaseListAppBarFilters(): JSX.Element {
 
     return(
         <div className={classes.root}>
-            <Typography variant="h6">Filters</Typography>
+            <Typography variant="h6" className={classes.title}>Filters</Typography>
             <Button
                 size="small"
                 variant="contained"

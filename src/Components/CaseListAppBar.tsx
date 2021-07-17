@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
     alpha,
-    AppBar, Chip,
-    IconButton,
+    AppBar,
     InputBase,
     makeStyles,
     Theme,
@@ -10,15 +9,10 @@ import {
     Typography
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import {AccountCircle} from "@material-ui/icons";
-import FilterListIcon from '@material-ui/icons/FilterList';
-import CaseListAppBarFilters from "./CaseListAppBarFilters";
+import {CaseStoreContext} from "./State/CaseStore";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        flexGrow: 1,
-    },
-    title: {
         flexGrow: 1,
     },
     grow: {
@@ -67,13 +61,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function CaseListAppBar(): JSX.Element {
+    const { searchQuery, setSearchQuery} = useContext(CaseStoreContext);
 
     const classes = useStyles();
 
     return(
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" className={classes.title}>
+                <Typography variant="h6">
                     Case List
                 </Typography>
                 <div className={classes.search}>
@@ -81,12 +76,14 @@ export default function CaseListAppBar(): JSX.Element {
                         <SearchIcon />
                     </div>
                     <InputBase
-                        placeholder="Search or Filter…"
+                        placeholder="Search Case Titles..."
                         classes={{
                             root: classes.inputRoot,
                             input: classes.inputInput,
                         }}
                         inputProps={{ 'aria-label': 'search' }}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
                 <div className={classes.grow} />

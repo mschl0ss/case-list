@@ -28,11 +28,23 @@ const useStyles = makeStyles({
 
 export default function CaseTable(): JSX.Element {
     const classes = useStyles();
-    const { cases, filters } = useContext(CaseStoreContext);
+    const { cases, filters, searchQuery } = useContext(CaseStoreContext);
 
     const casesToShow = (): Case[] => {
-        if(filters.length === 0) { return cases; }
-        return cases.filter(caseArg => filters.includes(caseArg.caseStatus))
+        const noFilters = filters.length === 0;
+        const noSearchQuery = searchQuery === undefined || searchQuery.length === 0;
+        if(noFilters && noSearchQuery) {
+            return cases;
+        }
+        return cases
+            .filter(caseArg => {
+                if(filters.length === 0) {return true}
+                return filters.includes(caseArg.caseStatus)
+            })
+            .filter(caseArg => {
+                if(!searchQuery) return true;
+                return caseArg.title?.includes(searchQuery)
+            })
     }
 
     return(
