@@ -137,6 +137,6 @@ Clicking on any row opens the edit/detail form, allowing the user to edit the ti
 ***
 ### Database persistence
 
-`idb-keyval` for front end db persistence.  Data will persist across refreshes but not if the cache is cleared.   Can be seen in the `Application` tab of Chrome dev tools.
+`idb-keyval` for front end db persistence.  Data will persist across refreshes and the browser being closed but is obviously limited to the local machine.   Can be seen in the `Application` tab of Chrome dev tools.
 
 ![Front end db](https://res.cloudinary.com/dkyipbwc4/image/upload/v1626622879/README%20Pictures/dev_console_idb-keyval_hmgger.png)
