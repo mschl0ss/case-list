@@ -38,11 +38,11 @@ Batting 50% on 'nice to have' criteria.
 ## Design decisions
 
 - Built in React with TypeScript.
-- useContext instead of more robust state management for several reasons.
+- useContext instead of more robust state management for several reasons:
     - The scope of this simple app is small enough that useContext's performance hit from extra rerenders is trivial.
     - That said, re-rendering the whole table on search/filter is probably appropriate.
     - Speed and simplicity of implementation let development move fast.
-    - Ultimately, excessive rerenders from context and prop drilling would prevent this approach from scaling.  This would be about the point in development that i would switch over to Redux/redux-toolkit or something more arcane like mobx.
+    - Ultimately, excessive rerenders from context and prop drilling would prevent this approach from scaling.  This would be about the point in development that I would switch over to Redux/redux-toolkit or something more arcane like mobx.
 - Material UI for aesthetically pleasant components.
 - Used `idb-keyval` for front end fake db.  This allowed me to focus on front end work and get a reasonable amount of database persistence.  Also it _is_ technically a __'Front-End Take-Home Test'__. I'm hoping this is 'clever' and not 'obviously cheating'.
 - Images are perhaps not obviously annotatable, but given the captive, long term user base design decisions like this are workable.
