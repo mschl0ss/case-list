@@ -45,11 +45,11 @@ export default function CaseTable(): JSX.Element {
                 })
                 .filter(caseArg => {
                     if(!searchQuery) return true;
-                    return caseArg.title?.includes(searchQuery)
+                    return caseArg.title?.toLowerCase().includes(searchQuery.toLowerCase())
                 })
         }
 
-        const sortedCases = newCaseList.sort((a,b) => moment(a.dateUpdated).isBefore(moment(b.dateUpdated)) ? 1 : -1)
+        const sortedCases = newCaseList.sort((a,b) => moment(a.dateCreated).isBefore(moment(b.dateCreated)) ? 1 : -1)
         setCasesToShow(sortedCases)
 
     }, [cases, filters, searchQuery])

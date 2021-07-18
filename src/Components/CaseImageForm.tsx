@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {CaseImage} from "../Utils/Types";
 import {makeStyles} from "@material-ui/core";
-import {ReactPictureAnnotation} from "react-picture-annotation";
+import {defaultShapeStyle, ReactPictureAnnotation} from "react-picture-annotation";
 import {IAnnotation} from "react-picture-annotation/dist/types/src/Annotation";
 import {CaseImageRepository} from "../Server/fake-database";
+import {IShapeStyle} from "react-picture-annotation/dist/types/src/Shape";
 
 const useStyles = makeStyles({
     root: {
@@ -14,7 +15,13 @@ const useStyles = makeStyles({
         maxWidth: '100%',
         minHeight: 800
     },
-})
+});
+
+const annotateStyle: IShapeStyle = {
+    ...defaultShapeStyle,
+    padding: 5,
+}
+
 interface CaseImageFormProps {
     caseImageProp: CaseImage
 }
@@ -52,6 +59,7 @@ export default function CaseImageForm(props: CaseImageFormProps): JSX.Element {
     return(
         <div className={classes.root} style={{minHeight: caseImageProp.height * 1.05 * ratio}}>
             <ReactPictureAnnotation
+                annotationStyle={annotateStyle}
                 onChange={onChange}
                 width={caseImageProp.width * ratio}
                 height={caseImageProp.height * ratio}
