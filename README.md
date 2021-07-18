@@ -37,20 +37,20 @@ Batting 50% on 'nice to have' criteria.
 ***
 ## Design decisions
 
+- Built in React with TypeScript
 - useContext instead of more robust state management for several reasons
     - The scope of this simple app is small enough that useContext's performance hit from extra rerenders is trivial
     - That said, re-rendering the whole table on search/filter is probably appropriate
     - Speed and simplicity of implementation let development move fast
     - Ultimately, excessive rerenders from context and prop drilling would prevent this approach from scaling.  This would be about the point in development that i would switch over to Redux/redux-toolkit or something more arcane like mobx.
 - Material UI for aesthetically pleasant components
-- Used `idb-keyval` for front end fake db.  This allowed me to focus on front end work and get a reasonable amount of database persistence.  Also it _is_ technically a __'Front-End Take-Home Test'.
-
-- images are perhaps not obviously annotatable, but given the captive, long term user base design decisions like this are workable
+- Used `idb-keyval` for front end fake db.  This allowed me to focus on front end work and get a reasonable amount of database persistence.  Also it _is_ technically a __'Front-End Take-Home Test'__. I'm hoping this is 'clever' and not 'obviously cheating'.
+- Images are perhaps not obviously annotatable, but given the captive, long term user base design decisions like this are workable
 - Image section will correctly determine the size of the image and scale and size accordingly
 
 ### Problems
 -  Cloudinary widget is hugely unreliable
-    - I tried adding the widget higher up in hierarchy and passing it down to get it to load sooner, with the improvement is not hugely noticeable.  In real life I'd use a more established solution like an AWS S3 bucket.
+    - I tried adding the widget higher up in hierarchy and passing it down to get it to load sooner, but the improvement is not hugely noticeable.  In real life I'd use a more established solution like an AWS S3 bucket.
 - Code Smell: Code to determine the color to status correlation is repeated with small variations several times
 - Excessive prop drilling in places (specifically the CaseTable -> CaseRow -> CaseForm -> etc) leading to excessive rerenders and unnecessarily cognitively complex code.  Better foresight and planning would probably have led to each row managing its state with its own context (or just using Redux for the whole thing)
 - Didn't utilize the theme object for consistent, central design factors (e.g. standardize padding). Not a significant issue given the small scope of the project, but the tech debt would quickly pile up (but would be a fairly small lift to fix)
@@ -136,6 +136,6 @@ Clicking on any row opens the edit/detail form, allowing the user to edit the ti
 ***
 ### Database persistence
 
-`idb-keyval` for front end db persistence.  Data will persist across refreshes but not if the cache is cleared.  I'm hoping this is 'clever' and not 'obviously cheating'. Can be seen in the `Application` tab of Chrome dev tools.
+`idb-keyval` for front end db persistence.  Data will persist across refreshes but not if the cache is cleared.   Can be seen in the `Application` tab of Chrome dev tools.
 
 ![Front end db](https://res.cloudinary.com/dkyipbwc4/image/upload/v1626622879/README%20Pictures/dev_console_idb-keyval_hmgger.png)
