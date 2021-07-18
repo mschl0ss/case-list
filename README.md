@@ -58,7 +58,7 @@ Batting 50% on 'nice to have' criteria.
 ### TODO
 - Introduce robust state management solution, most likely Redux/Redux-toolkit
 - Introduce validation to new case to make sure title is filled out
-- User Table sorting (https://material-ui.com/components/tables/#sorting-amp-selecting)
+- User Table sorting
 - Add date created column (data is already in the model)
 - Add very basic user creation, not even pw protected, just allow a user to track their own cases and choose if they are a regular user or a manager
 - Add more robust user auth, using bcrypt to hash and salt passwords should mitigate the security concerns of idb-keyval
