@@ -106,7 +106,7 @@ Created -> Submitted -
              /
 Resbumitted -
              \ 
-              --> Approved
+              --> Rejected
                                    
 
 ```
